@@ -1,0 +1,64 @@
+Indexing:
+we need to add this code line in the schema.
+.username: {
+    type: String,
+    index: true
+  },
+  email: String
+
+.orderSchema.index({ status: 1 });
+
+.userSchema.index(
+  { email: 1 },
+  { unique: true }
+);
+
+
+compound index:
+.orderSchema.index({
+  userId: 1,
+  status: 1
+});
+
+
+socket connection:
+
+
+import {server} from "socket.io";
+
+const server = http.createServer(app);
+
+
+const io = new Server(server, {
+  cors:{
+    origin : "http://localhost:5173",
+    method : ["GET", "POST"]
+  }
+})
+
+io.on(connection, (socket)=>{
+  console.log("connection established", socket.id);
+
+  socket.on("recieved_message", (data)=>{
+    console.log("message received, data);
+    socket.emit("server_message", data)
+  })
+})
+
+import {io} from "socket.io_client";
+
+const socket = io("http://localhost:3000");
+
+
+socket.on(connect, ()=>{
+  console.log("connection established", socket.id)
+})
+
+socket.emit("send message", {
+  message : "my message",
+  sender : "Azeem"
+})
+
+socket.on("server_message", (data)=>{
+  console.log("server_message recieved:" data)
+})

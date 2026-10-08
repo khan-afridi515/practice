@@ -4,17 +4,10 @@ export const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem("setcart")) || []);
-  const [totalcart, setTotalCart] = useState(0);
 
   useEffect(() => {
-    const totalQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-    setTotalCart(totalQty);
+    localStorage.setItem("setcart", JSON.stringify(cart));
   }, [cart]);
-
-
-  useEffect(()=>{
-    localStorage.setItem("setcart", JSON.stringify(cart))
-  }, [cart])
 
   const addToCart = (product) => {
     setCart((prevCart) => {
@@ -22,7 +15,7 @@ export function CartProvider({ children }) {
 
       if (existingItem) {
         return prevCart.map((item) =>
-          item.id === product.id ? { ...item, qty: item.qty + 1 } : item
+          item.id === product.id ? { ...item, qty: (item.qty || 1) + 1 } : item
         );
       }
 
@@ -30,26 +23,33 @@ export function CartProvider({ children }) {
     });
   };
 
-  // TODO: implement removeFromCart(productId)
   const removeFromCart = (productId) => {
-    
+    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
   };
 
-  // TODO: implement increaseQuantity(productId)
   const increaseQuantity = (productId) => {
-    // TODO: increase quantity immutably
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === productId ? { ...item, qty: (item.qty || 1) + 1 } : item
+      )
+    );
   };
 
-  // TODO: implement decreaseQuantity(productId)
   const decreaseQuantity = (productId) => {
-    // TODO: decrease quantity immutably
+    setCart((prevCart) =>
+      prevCart
+        .map((item) =>
+          item.id === productId ? { ...item, qty: (item.qty || 1) - 1 } : item
+        )
+        .filter((item) => item.qty > 0)
+    );
   };
 
-  // TODO: implement clearCart()
   const clearCart = () => {
-    // TODO: reset cart to an empty array
+    setCart([]);
   };
 
+  const totalcart = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
   const value = {
     cart,
     addToCart,
@@ -57,9 +57,7 @@ export function CartProvider({ children }) {
     increaseQuantity,
     decreaseQuantity,
     clearCart,
-    setCart,
-    totalcart,
-    setTotalCart
+    totalcart
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

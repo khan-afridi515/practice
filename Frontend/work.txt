@@ -1,0 +1,17 @@
+useCallback:
+when we create a function in parent component, and pass as props to child
+component so when we make some changes in parent so parent re-render
+also child re-render
+to prevent this child to re-render we wrap function in useCallback
+so then react will remember this function that this function is execute
+or not if this function is not execute so childern will not re-render
+
+
+suppose we have two functions in a component:
+
+useMemo:
+when we call one of them another will also re-render.
+suppose we addname and increasecount function so when we call addname
+increasecount will also re-render so we wrap increasecount in usememo
+and add count in dependency that increasecount should be render when there
+some changes come in count value

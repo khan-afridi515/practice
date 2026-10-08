@@ -127,3 +127,27 @@ export const getpagination = async(req, res) => {
     return res.status(500).json({message: err.message || "Something went wrong!"})
   }
 }
+
+
+
+//indexing used:
+
+export const getOrders = async(req, res) => {
+    try{
+        const {status} = req.body || {};
+
+        if(!status){
+            return res.status(402).json({message : "status value must be provided!"})
+        }
+      const getData = await order.find({status})
+
+      if(!getData){
+        return res.status(400).json({message : "Data doesn't fetched"})
+      }
+
+      return res.status(200).json({message : "Data fetched successfully!", data : getData})
+    }
+    catch(err){
+        return res.status(500).json({message : err.message || "Something went wrong"})
+    }
+}

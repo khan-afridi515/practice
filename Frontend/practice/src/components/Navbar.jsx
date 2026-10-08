@@ -33,11 +33,13 @@ const Navbar = () => {
       </Link>
 
       <div className="navbar__actions">
+        <Link to="/" className="navbar__link">Products</Link>
+        <Link to="/cart" className="navbar__link navbar__cart-link">
+          Cart <span className="navbar__cart-count">{totalcart}</span>
+        </Link>
         {isLoggedIn ? (
           <>
             <span className="navbar__welcome">Welcome, {obj1.name}</span>
-            <Link to="/">Products</Link>
-            <Link to="/cart">Cart({totalcart})</Link>
             <button type="button" className="btn btn--secondary" onClick={handleLogout}>
               Logout
             </button>
@@ -45,9 +47,6 @@ const Navbar = () => {
         ) : (
           <>
             <span className="navbar__guest">Guest</span>
-            <Link to="/cart" className="btn btn--secondary" style={{ textDecoration: 'none' }}>
-              Cart
-            </Link>
             <button type="button" className="btn btn--primary" onClick={handleLogin}>
               Login
             </button>
