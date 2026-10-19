@@ -11,7 +11,7 @@ suppose we have two functions in a component:
 
 useMemo:
 when we call one of them another will also re-render.
-suppose we addname and increasecount function so when we call addname
+suppose we have addname and increasecount function so when we call addname
 increasecount will also re-render so we wrap increasecount in usememo
-and add count in dependency that increasecount should be render when there
-some changes come in count value
+and add count in dependency that increasecount should be render when
+some changes occur in count value

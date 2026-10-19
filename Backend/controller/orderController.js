@@ -90,17 +90,16 @@ export const getpipeline = async (req, res) => {
     }
 };
 
-
 export const getOrder = async (req, res) => {
     try {
 
         const findOrder = await order.find().populate('userId', 'name email');
 
-        if(!findOrder){
-            return res.status(400).json({wrn:"Data can't be fetched!"})
+        if (!findOrder) {
+            return res.status(400).json({ wrn: "Data can't be fetched!" })
         }
 
-       
+
         return res.status(200).json({ msg: "Data fetched successfully!", data: findOrder })
     }
     catch (err) {
@@ -108,46 +107,76 @@ export const getOrder = async (req, res) => {
     }
 }
 
+// populate is used when we have two collections employee and department and we have add id of department 
+// as refrence to employee collection and we want to get data department with employee
+// so we will use populate.
 
-export const getpagination = async(req, res) => {
-  try{
-            const page = 2;
-            const limit = 3;
+export const getpagination = async (req, res) => {
+    try {
+        const page = 2;
+        const limit = 3;
 
-            const skip = (page -1)*limit;
-    const getData = await order.find().skip(skip).limit(limit);
+        const skip = (page - 1) * limit;
+        const getData = await order.find().skip(skip).limit(limit);
 
-    if(!getData){
-        return res.status(400).json({wrn : "Data doesn't fetched!"})
+        if (!getData) {
+            return res.status(400).json({ wrn: "Data doesn't fetched!" })
+        }
+
+        return res.status(200).json({ message: "Data fetched successfully!", data: getData })
     }
-
-    return res.status(200).json({message : "Data fetched successfully!", data:getData})
-  }
-  catch(err){
-    return res.status(500).json({message: err.message || "Something went wrong!"})
-  }
+    catch (err) {
+        return res.status(500).json({ message: err.message || "Something went wrong!" })
+    }
 }
-
-
 
 //indexing used:
 
-export const getOrders = async(req, res) => {
-    try{
-        const {status} = req.body || {};
+export const getOrders = async (req, res) => {
+    try {
+        const { status } = req.body || {};
 
-        if(!status){
-            return res.status(402).json({message : "status value must be provided!"})
+        if (!status) {
+            return res.status(402).json({ message: "status value must be provided!" })
         }
-      const getData = await order.find({status})
+        const getData = await order.find({ status })
 
-      if(!getData){
-        return res.status(400).json({message : "Data doesn't fetched"})
-      }
+        if (!getData) {
+            return res.status(400).json({ message: "Data doesn't fetched" })
+        }
 
-      return res.status(200).json({message : "Data fetched successfully!", data : getData})
+        return res.status(200).json({ message: "Data fetched successfully!", data: getData })
     }
-    catch(err){
-        return res.status(500).json({message : err.message || "Something went wrong"})
+    catch (err) {
+        return res.status(500).json({ message: err.message || "Something went wrong" })
+    }
+}
+
+// when we add an index on any field in schema then search through this field will be 
+// faster mongodb will directly access that record instead of checking each document 
+// individually.
+
+
+
+const filterData = async(req, res)=> {
+    try{
+        const {category, minPrice, sort, page, limit} = req.query;
+
+
+        const skip = (page -1)*limit
+        const getData = await product.aggregate([
+            {$match : { category : category,  price :{$gte : minPrice}}},
+            { $sort : {price : 1}}
+        ]).skip(skip).limit(limit)
+
+        if(getData.length === 0){
+            return res.status(400).json({message : "Data doesn't found!"})
+        }
+
+        return res.status(200).json({message : "Data fetched successfully!", data : getData})
+
+    }
+    catch(error){
+        return res.status(400).json({message : error.message || "something went wrong"})
     }
 }

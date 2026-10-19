@@ -4,6 +4,9 @@ import { CartContext } from '../context/CartContext';
 
 
 const Navbar = () => {
+
+  
+
   const [isLoggedIn, setIsLoggedIn] = useState(JSON.parse(localStorage.getItem("saveStatus")));
 
   const {totalcart} = useContext(CartContext);
@@ -13,6 +16,17 @@ const Navbar = () => {
     class : 8,
     RNo : 10
   }
+
+
+  const {name : username} = obj1
+  console.log(username);
+
+  const newObj = {
+    ...obj1,
+    age : 12
+  }
+
+  console.log("new obg", newObj);
 
   localStorage.setItem("saveStatus", JSON.stringify(isLoggedIn));
 

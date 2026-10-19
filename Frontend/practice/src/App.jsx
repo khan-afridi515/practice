@@ -108,13 +108,13 @@ function App() {
   const withDrawMoney = (customer, amount) => {
     console.log("running website");
     setCustormers((prevCart) => {
-      
+
       const filterClient = prevCart.find((custom) => custom.name === customer)
       console.log("filterclient", filterClient);
       if (filterClient.balance > amount) {
         console.log("filterclient work");
         return prevCart.map((item) => {
-            return  item.name === customer ? {...item, balance : item.balance - amount} : item
+          return item.name === customer ? { ...item, balance: item.balance - amount } : item
         })
       }
       return prevCart
@@ -239,6 +239,45 @@ function App() {
     console.log(use, ":", user[use]);
   }
 
+
+  const allUser = [
+    { name: "Ali", age: 20 },
+    { name: "Ahmed", age: 25 },
+    { name: "Sara", age: 18 },
+    { name: "John", age: 30 }
+  ];
+
+
+  const newData = [
+    { name: "Ali", age: 20 },
+    { name: "Ahmed", age: 25 },
+    { name: "Sara", age: 25 }
+  ];
+
+  
+const x = "hello";
+const y = ""
+console.log("reverse string", x.split('').reverse().join(''))
+
+const counter = () => {
+  let count = 0;
+  return function(){
+      count++
+      return count
+    }}
+
+
+
+const adding = counter();
+
+console.log("adding value", adding())
+console.log("adding value", adding())
+console.log("adding value", adding())
+console.log("adding value", adding())
+
+
+
+
   return (
 
 
@@ -247,7 +286,7 @@ function App() {
         <BrowserRouter>
           <Routes>
 
-            <Route path="/" element={<StorefrontLayout><ProductList depositMoney={depositMoney} customers={custormers} withDrawMoney={withDrawMoney}/></StorefrontLayout>} />
+            <Route path="/" element={<StorefrontLayout><ProductList depositMoney={depositMoney} customers={custormers} withDrawMoney={withDrawMoney} /></StorefrontLayout>} />
             <Route path="/cart" element={<StorefrontLayout><CartPage /></StorefrontLayout>} />
           </Routes>
         </BrowserRouter>
